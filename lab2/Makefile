@@ -46,7 +46,6 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 sim: $(BIN)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@$^
 
 .PHONY: default all clean sim

@@ -1,5 +1,5 @@
-TOPNAME = mux241
-NXDC_FILES = constr/mux241.nxdc
+TOPNAME = lfsr
+NXDC_FILES = constr/lfsr.nxdc
 INC_PATH ?=
 
 VERILATOR = verilator
