@@ -1,10 +1,13 @@
 module bcd7seg(
   input [3:0] b,
+  input en,
   output reg [7:0] h
 );
 
   always @(*) begin
-    case(b)
+    if (!en) begin
+      h = 8'b11111111;
+    end else case(b)
       4'b0000: h = 8'b11000000;
       4'b0001: h = 8'b11111001;
       4'b0010: h = 8'b10100100;

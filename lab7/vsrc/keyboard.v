@@ -29,6 +29,7 @@ ps2_keyboard inst(
     .overflow(overflow)
 );
 
+reg seg_en;
 reg [7:0] cnt;
 reg [1:0] state;
 reg [7:0] curdata;
@@ -40,25 +41,29 @@ key2ascii inst2(
     .ascii(ascii)
 );
 
-bcd7seg bcd7seg0(.b(curdata[3:0]), .h(seg0));
-bcd7seg bcd7seg1(.b(curdata[7:4]), .h(seg1));
+bcd7seg bcd7seg0(.en(seg_en), .b(curdata[3:0]), .h(seg0));
+bcd7seg bcd7seg1(.en(seg_en), .b(curdata[7:4]), .h(seg1));
 
-bcd7seg bcd7seg2(.b(ascii[3:0]), .h(seg2));
-bcd7seg bcd7seg3(.b(ascii[7:4]), .h(seg3));
+bcd7seg bcd7seg2(.en(seg_en), .b(ascii[3:0]), .h(seg2));
+bcd7seg bcd7seg3(.en(seg_en), .b(ascii[7:4]), .h(seg3));
 
-bcd7seg bcd7seg6(.b(cnt[3:0]), .h(seg6));
-bcd7seg bcd7seg7(.b(cnt[7:4]), .h(seg7));
+
+bcd7seg bcd7seg6(.en(1), .b(cnt[3:0]), .h(seg6));
+bcd7seg bcd7seg7(.en(1), .b(cnt[7:4]), .h(seg7));
 
 always @(posedge clk) begin
     if (rst == 0 && ready) begin
         $display("keyboard: %x", data);
         if (state == 2'b00) begin
+            seg_en <= 1'b1;
             cnt <= cnt + 8'b1;
             curdata <= data;
             state <= 2'b01;
         end else if (state == 2'b01) begin
-            if (data == 8'hf0)
+            if (data == 8'hf0) begin
                 state <= 2'b10;
+                seg_en <= 1'b0;
+            end
         end else if (state == 2'b10) begin
             state <= 2'b00;
         end
@@ -67,6 +72,7 @@ end
 
 
 initial begin
+    seg_en = 1'b0;
     cnt = 0;
     state = 0;
 end
