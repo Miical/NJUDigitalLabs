@@ -1,0 +1,11 @@
+top=mux241
+
+io_in_0 (SW3, SW2)
+io_in_1 (SW5, SW4)
+io_in_2 (SW7, SW6)
+io_in_3 (SW9, SW8)
+
+io_sel (SW1, SW0)
+
+io_out (LD1, LD0)
+
