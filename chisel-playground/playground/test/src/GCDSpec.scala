@@ -46,3 +46,25 @@ object GCDSpec extends ChiselUtestTester {
     }
   }
 }
+
+object encode83Spec extends ChiselUtestTester {
+  val tests = Tests {
+    test("encode83") {
+      testCircuit(new encode83()) {
+        dut =>
+          dut.io.in.poke(0.U)
+          dut.clock.step(1)
+          dut.io.out_bin.expect(0.U)
+          dut.io.ind.expect(0.U)
+
+          for (i <- 1 to 7) {
+            // dut.io.in.poke((1 << (i - 1)).U)
+            dut.io.in.poke(1 << (i - 1))
+            dut.clock.step(1)
+            dut.io.out_bin.expect(i - 1)
+            dut.io.ind.expect(1.U)
+          }
+      }
+    }
+  }
+}
